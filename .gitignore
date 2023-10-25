@@ -35,18 +35,3 @@ yarn-error.*
 *.tsbuildinfo
 
 .env
-
-# Android
-**/build/
-**/captures/
-**/gradle/
-**/local.properties
-
-
-# iOS
-**/Pods/
-**/*.xcworkspace
-**/*.xccheckout
-**/*.xcscmblueprint
-**/xcuserdata
-*.xcodeproj/project.xcworkspace/contents.xcworkspacedata
