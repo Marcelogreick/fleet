@@ -3,6 +3,7 @@ export default {
     WHITE: "#FFFFFF",
     BRAND_LIGHT: "#00B37E",
     BRAND_MID: "#00875F",
+    BRAND_DARK: "#00664D",
     GRAY_100: "#E1E1E6",
     GRAY_200: "#C4C4CC",
     GRAY_300: "#8D8D99",
