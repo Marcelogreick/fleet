@@ -4,12 +4,16 @@ import {
   useFonts,
 } from "@expo-google-fonts/roboto";
 import { ThemeProvider } from "styled-components/native";
+import { AppProvider, RealmProvider, UserProvider } from "@realm/react";
 
 import theme from "./src/theme";
 
 import { StatusBar } from "react-native";
 import { SignIn } from "./src/pages/SignIn";
 import { Loading } from "./src/components/Loading";
+import { REALM_APP_ID } from "@env";
+import { Home } from "./src/pages/Home";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -22,13 +26,19 @@ export default function App() {
   }
 
   return (
-    <ThemeProvider theme={theme}>
-      <StatusBar
-        barStyle="light-content"
-        backgroundColor="transparent"
-        translucent
-      />
-      <SignIn />
-    </ThemeProvider>
+    <AppProvider id={REALM_APP_ID}>
+      <ThemeProvider theme={theme}>
+      <SafeAreaProvider style={{ backgroundColor: theme.COLORS.GRAY_800 }}>
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor="transparent"
+          translucent
+        />
+        <UserProvider fallback={SignIn}>
+          <Home />
+        </UserProvider>
+        </SafeAreaProvider>
+      </ThemeProvider>
+    </AppProvider>
   );
 }

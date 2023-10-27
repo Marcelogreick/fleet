@@ -1,6 +1,7 @@
 import { Alert, ImageSourcePropType } from "react-native";
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
+import { Realm, useApp } from "@realm/react";
 
 import { Container, Slogan, Title } from "./styles";
 import backgroundImg from "../../assets/background.png";
@@ -20,6 +21,8 @@ export function SignIn() {
     scopes: ["profile", "email"],
   });
 
+  const app = useApp();
+
   function handleGoogleSignIn() {
     setIsAuthenticating(true);
 
@@ -33,9 +36,18 @@ export function SignIn() {
   useEffect(() => {
     if (response?.type === "success") {
       if (response.authentication?.idToken) {
-        fetch(
-          `https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=${response.authentication.idToken}`
-        ).then((response) => response.json());
+        const credentials = Realm.Credentials.jwt(
+          response.authentication.idToken
+        );
+
+        app.logIn(credentials).catch((error) => {
+          console.log(error);
+          Alert.alert(
+            "Entrar",
+            "Não foi possível conectar-se a sua conta google."
+          );
+          setIsAuthenticating(false);
+        });
       } else {
         Alert.alert(
           "Entrar",
