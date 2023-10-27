@@ -14,6 +14,7 @@ import { Loading } from "./src/components/Loading";
 import { REALM_APP_ID } from "@env";
 import { Home } from "./src/pages/Home";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { Routes } from "./src/routes";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -28,15 +29,15 @@ export default function App() {
   return (
     <AppProvider id={REALM_APP_ID}>
       <ThemeProvider theme={theme}>
-      <SafeAreaProvider style={{ backgroundColor: theme.COLORS.GRAY_800 }}>
-        <StatusBar
-          barStyle="light-content"
-          backgroundColor="transparent"
-          translucent
-        />
-        <UserProvider fallback={SignIn}>
-          <Home />
-        </UserProvider>
+        <SafeAreaProvider style={{ backgroundColor: theme.COLORS.GRAY_800 }}>
+          <StatusBar
+            barStyle="light-content"
+            backgroundColor="transparent"
+            translucent
+          />
+          <UserProvider fallback={SignIn}>
+            <Routes />
+          </UserProvider>
         </SafeAreaProvider>
       </ThemeProvider>
     </AppProvider>
