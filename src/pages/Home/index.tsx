@@ -5,12 +5,17 @@ import { CarStatus } from "../../components/CarStatus";
 import { HomeHeader } from "../../components/HomeHeader";
 import { useNavigation } from "@react-navigation/native";
 import Toast from "react-native-toast-message";
+import { CloudArrowUp } from "phosphor-react-native";
 import { Historic } from "../../libs/realm/scheme/Historic";
 import { HistoricCard, HistoricCardProps } from "../../components/HistoricCard";
 import { useEffect, useState } from "react";
 import { Alert, FlatList } from "react-native";
 import dayjs from "dayjs";
-import { saveLastSyncTimestamp } from "../../libs/asyncStorage/syncStorage";
+import {
+  getLastAsyncTimestamp,
+  saveLastSyncTimestamp,
+} from "../../libs/asyncStorage/syncStorage";
+import { TopMessage } from "../../components/TopMessage";
 
 export function Home() {
   const [vehicleInUse, setVehicleInUse] = useState<Historic | null>(null);
@@ -52,14 +57,13 @@ export function Home() {
         "status='arrival' SORT(created_at DESC)"
       );
 
-      // const lastSync = await getLastAsyncTimestamp();
+      const lastSync = await getLastAsyncTimestamp();
 
       const formattedHistoric = response.map((item) => {
         return {
           id: item._id.toString(),
           licensePlate: item.license_plate,
-          isSync: false,
-          // isSync: lastSync > item.updated_at!.getTime(),
+          isSync: lastSync > item.updated_at!.getTime(),
           created: dayjs(item.created_at).format(
             "[Saída em] DD/MM/YYYY [às] HH:mm"
           ),
@@ -145,6 +149,10 @@ export function Home() {
 
   return (
     <Container>
+      {percetageToSync && (
+        <TopMessage title={percetageToSync} icon={CloudArrowUp} />
+      )}
+
       <HomeHeader />
 
       <Content>
