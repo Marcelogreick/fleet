@@ -1,3 +1,5 @@
+import "react-native-get-random-values";
+
 import {
   Roboto_400Regular,
   Roboto_700Bold,
