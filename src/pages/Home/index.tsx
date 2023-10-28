@@ -1,6 +1,6 @@
 import { useUser } from "@realm/react";
 import { useQuery, useRealm } from "../../libs/realm";
-import { Container, Label, Title } from "./styles";
+import { Container, Content, Label, Title } from "./styles";
 import { CarStatus } from "../../components/CarStatus";
 import { HomeHeader } from "../../components/HomeHeader";
 import { useNavigation } from "@react-navigation/native";
@@ -90,30 +90,42 @@ export function Home() {
     };
   }, []);
 
+  useEffect(() => {
+    realm.subscriptions.update((mutableSubs, realm) => {
+      const historicByUserQuery = realm
+        .objects("Historic")
+        .filtered(`user_id = '${user!.id}'`);
+
+      mutableSubs.add(historicByUserQuery, { name: "hostoric_by_user" });
+    });
+  }, [realm]);
+
   return (
     <Container>
       <HomeHeader />
 
-      <CarStatus
-        licensePlate={vehicleInUse?.license_plate}
-        onPress={handleRegisterMoviment}
-      />
+      <Content>
+        <CarStatus
+          licensePlate={vehicleInUse?.license_plate}
+          onPress={handleRegisterMoviment}
+        />
 
-      <Title>Histórico</Title>
+        <Title>Histórico</Title>
 
-      <FlatList
-        data={vehicleHistoric}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <HistoricCard
-            data={item}
-            onPress={() => handleHistoricDetails(item.id)}
-          />
-        )}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 100 }}
-        ListEmptyComponent={<Label>Nenhum registro de utilização.</Label>}
-      />
+        <FlatList
+          data={vehicleHistoric}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <HistoricCard
+              data={item}
+              onPress={() => handleHistoricDetails(item.id)}
+            />
+          )}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 100 }}
+          ListEmptyComponent={<Label>Nenhum registro de utilização.</Label>}
+        />
+      </Content>
     </Container>
   );
 }

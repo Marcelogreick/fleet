@@ -1,4 +1,4 @@
-import { Container } from "./styles";
+import { Container, Content } from "./styles";
 import { Header } from "../../components/Header";
 import { Button } from "../../components/Button";
 import { LicensePlateInput } from "../../components/LicensePlateInput";
@@ -77,34 +77,36 @@ export function Departure() {
 
       <KeyboardAwareScrollView extraHeight={100}>
         <ScrollView>
-          <LicensePlateInput
-            ref={licensePlateRef}
-            label="Placa do veículo"
-            placeholder="BRA1234"
-            onSubmitEditing={() => {
-              descriptionRef.current?.focus();
-            }}
-            returnKeyType="next"
-            onChangeText={setLicensePlate}
-          />
+          <Content>
+            <LicensePlateInput
+              ref={licensePlateRef}
+              label="Placa do veículo"
+              placeholder="BRA1234"
+              onSubmitEditing={() => {
+                descriptionRef.current?.focus();
+              }}
+              returnKeyType="next"
+              onChangeText={setLicensePlate}
+            />
+
+            <TextAreaInput
+              ref={descriptionRef}
+              label="Finalizade"
+              placeholder="Vou utilizar o veículo para..."
+              onSubmitEditing={handleDepartureRegister}
+              returnKeyType="send"
+              blurOnSubmit
+              onChangeText={setDescription}
+            />
+
+            <Button
+              title="Registar Saída"
+              onPress={handleDepartureRegister}
+              isLoading={isRegistering}
+            />
+          </Content>
         </ScrollView>
       </KeyboardAwareScrollView>
-
-      <TextAreaInput
-        ref={descriptionRef}
-        label="Finalizade"
-        placeholder="Vou utilizar o veículo para..."
-        onSubmitEditing={handleDepartureRegister}
-        returnKeyType="send"
-        blurOnSubmit
-        onChangeText={setDescription}
-      />
-
-      <Button
-        title="Registar Saída"
-        onPress={handleDepartureRegister}
-        isLoading={isRegistering}
-      />
     </Container>
   );
 }

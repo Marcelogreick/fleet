@@ -7,7 +7,7 @@ import {
   useFonts,
 } from "@expo-google-fonts/roboto";
 import { ThemeProvider } from "styled-components/native";
-import { AppProvider, RealmProvider, UserProvider } from "@realm/react";
+import { AppProvider, UserProvider } from "@realm/react";
 
 import theme from "./src/theme";
 
@@ -17,6 +17,7 @@ import { Loading } from "./src/components/Loading";
 import { REALM_APP_ID } from "@env";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Routes } from "./src/routes";
+import { RealmProvider, syncConfig } from "./src/libs/realm";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -38,7 +39,7 @@ export default function App() {
             translucent
           />
           <UserProvider fallback={SignIn}>
-            <RealmProvider fallback={Loading}>
+            <RealmProvider fallback={Loading} sync={syncConfig}>
               <Routes />
             </RealmProvider>
           </UserProvider>

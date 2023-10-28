@@ -15,7 +15,7 @@ export const Content = styled.View`
 export const Message = styled.Text`
   color: ${({ theme }) => theme.COLORS.WHITE};
   font-family: ${({ theme }) => theme.FONT_FAMILY.REGULAR};
-  textalign: center;
+  text-align: center;
 
   margin-bottom: 44px;
 `;
