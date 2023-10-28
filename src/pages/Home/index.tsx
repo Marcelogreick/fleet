@@ -44,9 +44,18 @@ export function Home() {
     }
   }
 
-  // useEffect(() => {
-  //   fetchHistoric();
-  // },[historic]);
+  useEffect(() => {
+    fetchVehicleInUse();
+  }, []);
+
+  useEffect(() => {
+    realm.addListener("change", () => fetchVehicleInUse());
+    return () => {
+      if (realm && !realm.isClosed) {
+        realm.removeListener("change", fetchVehicleInUse);
+      }
+    };
+  }, []);
 
   return (
     <Container>
