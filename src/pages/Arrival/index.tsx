@@ -69,7 +69,7 @@ export function Arrival() {
 
   return (
     <Container>
-      <Header title="Chegada" />
+      <Header title={title} />
 
       <Content>
         <Label>Placa do veículo</Label>
@@ -78,11 +78,21 @@ export function Arrival() {
 
       <Label>Finalidade</Label>
       <Description>{historic?.description}</Description>
-      <Footer>
-        <ButtonIcon icon={X} onPress={handleRemoveVehicleUsage} />
 
-        <Button title="Registrar chegada" onPress={handleArrivalRegister} />
-      </Footer>
+      {historic?.status === "departure" && (
+        <Footer>
+          <ButtonIcon icon={X} onPress={handleRemoveVehicleUsage} />
+
+          <Button title="Registrar chegada" onPress={handleArrivalRegister} />
+        </Footer>
+      )}
+
+      {dataNotSynced && (
+        <AsyncMessage>
+          Sincronização da{" "}
+          {historic?.status === "departure" ? "partida" : "chegada"} pendente
+        </AsyncMessage>
+      )}
     </Container>
   );
 }
