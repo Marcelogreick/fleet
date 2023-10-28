@@ -4,17 +4,20 @@ import { Container, Content, Label, Title } from "./styles";
 import { CarStatus } from "../../components/CarStatus";
 import { HomeHeader } from "../../components/HomeHeader";
 import { useNavigation } from "@react-navigation/native";
+import Toast from "react-native-toast-message";
 import { Historic } from "../../libs/realm/scheme/Historic";
 import { HistoricCard, HistoricCardProps } from "../../components/HistoricCard";
 import { useEffect, useState } from "react";
 import { Alert, FlatList } from "react-native";
 import dayjs from "dayjs";
+import { saveLastSyncTimestamp } from "../../libs/asyncStorage/syncStorage";
 
 export function Home() {
   const [vehicleInUse, setVehicleInUse] = useState<Historic | null>(null);
   const [vehicleHistoric, setVehicleHistoric] = useState<HistoricCardProps[]>(
     []
   );
+  const [percetageToSync, setPercentageToSync] = useState<string | null>(null);
 
   const { navigate } = useNavigation();
 
@@ -73,6 +76,28 @@ export function Home() {
     navigate("arrival", { id });
   }
 
+  async function progressNotification(
+    transferred: number,
+    transferable: number
+  ) {
+    const percentage = (transferred / transferable) * 100;
+
+    if (percentage === 100) {
+      await saveLastSyncTimestamp();
+      await fetchHistoric();
+      setPercentageToSync(null);
+
+      Toast.show({
+        type: "info",
+        text1: "Todos os dados estão sincronizado.",
+      });
+    }
+
+    if (percentage < 100) {
+      setPercentageToSync(`${percentage.toFixed(0)}% sincronizado.`);
+    }
+  }
+
   useEffect(() => {
     fetchVehicleInUse();
   }, []);
@@ -99,6 +124,24 @@ export function Home() {
       mutableSubs.add(historicByUserQuery, { name: "hostoric_by_user" });
     });
   }, [realm]);
+
+  useEffect(() => {
+    const syncSession = realm.syncSession;
+
+    if (!syncSession) {
+      return;
+    }
+
+    syncSession.addProgressNotification(
+      Realm.ProgressDirection.Upload,
+      Realm.ProgressMode.ReportIndefinitely,
+      progressNotification
+    );
+
+    return () => {
+      syncSession.removeProgressNotification(progressNotification);
+    };
+  }, []);
 
   return (
     <Container>
