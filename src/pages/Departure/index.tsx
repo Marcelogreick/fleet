@@ -3,11 +3,14 @@ import { Header } from "../../components/Header";
 import { Button } from "../../components/Button";
 import { LicensePlateInput } from "../../components/LicensePlateInput";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { ScrollView, TextInput } from "react-native";
 import { TextAreaInput } from "../../components/TextAreaInput";
 
 export function Departure() {
+  const [description, setDescription] = useState("");
+  const [licensePlate, setLicensePlate] = useState("");
+
   const descriptionRef = useRef<TextInput>(null);
   const licensePlateRef = useRef<TextInput>(null);
 
