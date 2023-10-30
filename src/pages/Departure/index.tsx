@@ -2,6 +2,7 @@ import { Container, Content, Message, MessageContent } from "./styles";
 import { Header } from "../../components/Header";
 import { Button } from "../../components/Button";
 import { LicensePlateInput } from "../../components/LicensePlateInput";
+import { CarSimple } from "phosphor-react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useEffect, useRef, useState } from "react";
 import { Alert, ScrollView, TextInput } from "react-native";
@@ -22,6 +23,7 @@ import {
 } from "expo-location";
 import { Loading } from "../../components/Loading";
 import { getAddressLocation } from "../../utils/getAddressLocation";
+import { LocationInfo } from "../../components/LocationInfo";
 
 export function Departure() {
   const [description, setDescription] = useState("");
@@ -152,6 +154,14 @@ export function Departure() {
       <KeyboardAwareScrollView extraHeight={100}>
         <ScrollView>
           <Content>
+            {currentAddress && (
+              <LocationInfo
+                icon={CarSimple}
+                label="Localização atual"
+                description={currentAddress}
+              />
+            )}
+
             <LicensePlateInput
               ref={licensePlateRef}
               label="Placa do veículo"
