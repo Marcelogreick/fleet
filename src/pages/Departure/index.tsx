@@ -24,6 +24,7 @@ import {
 import { Loading } from "../../components/Loading";
 import { getAddressLocation } from "../../utils/getAddressLocation";
 import { LocationInfo } from "../../components/LocationInfo";
+import { Map } from "../../components/Map";
 
 export function Departure() {
   const [description, setDescription] = useState("");
@@ -71,11 +72,13 @@ export function Departure() {
             user_id: user!.id,
             license_plate: licensePlate,
             description,
-            // coords:[{
-            //   latitude: currentCoords.latitude,
-            //   longitude: currentCoords.longitude,
-            //   timestamp: new Date().getTime()
-            // }]
+            coords: [
+              {
+                latitude: currentCoords.latitude,
+                longitude: currentCoords.longitude,
+                timestamp: new Date().getTime(),
+              },
+            ],
           })
         );
       });
@@ -153,6 +156,8 @@ export function Departure() {
 
       <KeyboardAwareScrollView extraHeight={100}>
         <ScrollView>
+          {currentCoords && <Map coordinates={[currentCoords]} />}
+
           <Content>
             {currentAddress && (
               <LocationInfo
