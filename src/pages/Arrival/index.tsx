@@ -8,7 +8,7 @@ import { LatLng } from "react-native-maps";
 import { Header } from "../../components/Header";
 import { Button } from "../../components/Button";
 import { Map } from "../../components/Map";
-
+import { Locations } from "../../components/Locations";
 import {
   Container,
   Content,
@@ -28,6 +28,7 @@ import { LocationInfoProps } from "../../components/LocationInfo";
 import { Historic } from "../../libs/realm/scheme/Historic";
 import { ButtonIcon } from "../../components/Buttonicon";
 import dayjs from "dayjs";
+import { Loading } from "../../components/Loading";
 
 type RouteParamProps = {
   id: string;
@@ -158,6 +159,10 @@ export function Arrival() {
     getLocationsInfo();
   }, [historic]);
 
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
     <Container>
       <Header title={title} />
@@ -165,6 +170,7 @@ export function Arrival() {
       {coordinates.length > 0 && <Map coordinates={coordinates} />}
 
       <Content>
+        <Locations departure={departure} arrival={arrival} />
         <Label>Placa do veículo</Label>
         {/* @ts-ignore */}
         <LicensePlate>{historic?.license_plate}</LicensePlate>
