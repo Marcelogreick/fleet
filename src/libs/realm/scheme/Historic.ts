@@ -22,14 +22,14 @@ export class Historic extends Realm.Object<Historic> {
     user_id,
     description,
     license_plate,
-  }: // coords,
-  GenerateProps) {
+    coords,
+  }: GenerateProps) {
     return {
       _id: new Realm.BSON.UUID(),
       user_id,
       description,
       license_plate,
-      // coords,
+      coords,
       status: "departure",
       created_at: new Date(),
       updated_at: new Date(),

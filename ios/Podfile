@@ -11,9 +11,6 @@ platform :ios, podfile_properties['ios.deploymentTarget'] || '13.0'
 install! 'cocoapods',
   :deterministic_uuids => false
 
-install! 'cocoapods', :warn_for_unused_master_specs_repo => false
-
-
 prepare_react_native_project!
 
 # If you are using a `react-native-flipper` your iOS build will fail when `NO_FLIPPER=1` is set.
@@ -71,6 +68,12 @@ target 'fleet' do
     )
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
 
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings["ONLY_ACTIVE_ARCH"] = "NO"
+      end
+    end
+
     # This is necessary for Xcode 14, because it signs resource bundles by default
     # when building for devices.
     installer.target_installation_results.pod_target_installation_results
@@ -91,3 +94,5 @@ target 'fleet' do
     end
   end
 end
+
+
