@@ -84,6 +84,8 @@ export function Departure() {
         );
       }
 
+      await startLocationTask();
+
       realm.write(() => {
         realm.create(
           "Historic",

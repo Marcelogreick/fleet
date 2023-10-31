@@ -16,6 +16,7 @@ import { ButtonIcon } from "../../components/Buttonicon";
 import { useObject, useRealm } from "../../libs/realm";
 import { Historic } from "../../libs/realm/scheme/Historic";
 import { Alert } from "react-native";
+import { stopLocationTask } from "../../tasks/backgroundLocationTask";
 
 type RouteParamProps = {
   id: string;
@@ -58,6 +59,8 @@ export function Arrival() {
           "Não foi possível obter os dados para registrar a chegada do veículo."
         );
       }
+
+      await stopLocationTask();
 
       realm.write(() => {
         historic.status = "arrival";
